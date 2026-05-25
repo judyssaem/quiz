@@ -353,7 +353,7 @@
   }
   .bond-rect.given {
     fill: var(--cream-deep);
-    stroke: var(--soil-brown);
+    stroke: var(--leaf-deep);
     stroke-width: 5;
     stroke-dasharray: 0;
   }
@@ -458,37 +458,22 @@
     gap: 12px;
   }
 
-  /* ===== 모으기 모드: 노란 모으기판이 패널을 꽉 채우게 ===== */
-  .making-bond-panel {
-    display: flex;
-    flex-direction: column;
-  }
-  .making-bond-wrap {
-    flex: 1;
-    width: 100%;
-    padding: 14px;
-    box-sizing: border-box;
-    justify-content: center;
-  }
-  .making-bond-svg {
-    width: 100% !important;
-    max-width: min(480px, 55vh) !important;
-    height: auto;
-    margin: 0 auto;
-  }
-
-  /* ===== 가르기 모드: 좌·우 패널 통일 (flex column, 10배열판 세로 중앙) ===== */
+  /* ===== 모으기 · 가르기 모드 공통: 좌·우 패널 통일 (flex column, 10배열판 세로 중앙) ===== */
+  .making-frame-panel,
   .breaking-frame-panel,
+  .making-bond-panel,
   .breaking-bond-panel {
     display: flex;
     flex-direction: column;
   }
   /* 10배열판 패널: ten-frame-wrap을 남은 공간 안에서 세로 중앙 정렬 */
+  .making-frame-panel .ten-frame-wrap,
   .breaking-frame-panel .ten-frame-wrap {
     margin-top: auto;
     margin-bottom: auto;
   }
-  /* 가르기판 + 숫자판: 가로 폭을 통일, 사이에 14px 여유, 그룹을 세로 중앙 정렬 */
+  /* 모으기판 / 가르기판 + 숫자판: 가로 폭을 통일, 사이에 14px 여유, 그룹을 세로 중앙 정렬 */
+  .making-bond-panel .bond-wrap,
   .breaking-bond-panel .bond-wrap {
     width: 100%;
     max-width: 340px;
@@ -498,9 +483,11 @@
     padding: 12px 10px;
     box-sizing: border-box;
   }
+  .making-bond-panel .bond-svg,
   .breaking-bond-panel .bond-svg {
     max-width: min(320px, 38vh);
   }
+  .making-bond-panel .num-cards-wrap,
   .breaking-bond-panel .num-cards-wrap {
     width: 100%;
     max-width: 340px;
@@ -510,6 +497,7 @@
     margin-bottom: auto;
     box-sizing: border-box;
   }
+  .making-bond-panel .num-cards,
   .breaking-bond-panel .num-cards {
     max-width: 100%;
     gap: 8px;
@@ -708,12 +696,12 @@
     <button class="mode-card making" data-mode="making" type="button">
       <span class="big-emoji">🌱</span>
       <h2>10 모으기</h2>
-      <p>숫자를 보고<br>그림으로 표현해요</p>
+      <p>그림을 보고<br>모으기판에 수를 써요</p>
     </button>
     <button class="mode-card breaking" data-mode="breaking" type="button">
       <span class="big-emoji">🍂</span>
       <h2>10 가르기</h2>
-      <p>그림을 보고<br>숫자로 표현해요</p>
+      <p>그림을 보고<br>가르기판에 수를 써요</p>
     </button>
   </div>
 </div>
@@ -727,33 +715,36 @@
       <div class="progress-bar"><div class="progress-bar-fill" id="makingProgressFill"></div></div>
     </div>
   </div>
-  <div class="problem-title">🔢 모으기판의 숫자를 보고, 10 배열판에 그림을 채워보세요!</div>
+  <div class="problem-title">👩‍🏫 10 배열판의 그림을 보고, 모으기판에 숫자 카드를 끌어다 놓아 보세요!</div>
 
   <main>
-    <!-- 좌측: 모으기판 (숫자 미리 표시) -->
-    <section class="panel making-bond-panel">
-      <h2>🔢 모으기판</h2>
-      <div class="bond-wrap making-bond-wrap">
-        <svg class="bond-svg making-bond-svg" viewBox="0 0 360 310" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
-          <line class="bond-line" x1="80" y1="130" x2="180" y2="180"/>
-          <line class="bond-line" x1="280" y1="130" x2="180" y2="180"/>
-          <rect class="bond-rect given" x="10" y="10" width="140" height="120" rx="14" ry="14"/>
-          <text class="bond-text given" id="makingTextA" x="80" y="70">·</text>
-          <rect class="bond-rect given" x="210" y="10" width="140" height="120" rx="14" ry="14"/>
-          <text class="bond-text given" id="makingTextB" x="280" y="70">·</text>
-          <rect class="bond-rect given" x="110" y="180" width="140" height="120" rx="14" ry="14"/>
-          <text class="bond-text given" id="makingTextC" x="180" y="240">·</text>
-        </svg>
+    <!-- 좌측: 미리 채워진 10 배열판 -->
+    <section class="panel making-frame-panel">
+      <h2>10 배열판</h2>
+      <div class="ten-frame-wrap">
+        <div class="ten-frame readonly" id="makingFrame"></div>
       </div>
     </section>
 
-    <!-- 우측: 팔레트 + 10 배열판 -->
-    <section class="panel">
-      <h2>🎨 그림으로 표현해요</h2>
-      <div class="palette" id="makingPalette"></div>
-      <div class="ten-frame-wrap">
-        <h2 style="margin-bottom:10px;">📦 10 배열판</h2>
-        <div class="ten-frame" id="makingFrame"></div>
+    <!-- 우측: 빈 모으기판 + 숫자 카드 -->
+    <section class="panel making-bond-panel">
+      <h2>모으기판</h2>
+      <div class="bond-wrap">
+        <svg class="bond-svg" viewBox="0 0 360 310" xmlns="http://www.w3.org/2000/svg" id="makingBondSvg">
+          <line class="bond-line" x1="80" y1="130" x2="180" y2="180"/>
+          <line class="bond-line" x1="280" y1="130" x2="180" y2="180"/>
+          <rect class="bond-rect drop-target" x="10" y="10" width="140" height="120" rx="14" ry="14" data-key="a"/>
+          <text class="bond-text placeholder" id="makeTextA" x="80" y="70">?</text>
+          <rect class="bond-rect drop-target" x="210" y="10" width="140" height="120" rx="14" ry="14" data-key="b"/>
+          <text class="bond-text placeholder" id="makeTextB" x="280" y="70">?</text>
+          <rect class="bond-rect drop-target" x="110" y="180" width="140" height="120" rx="14" ry="14" data-key="c"/>
+          <text class="bond-text placeholder" id="makeTextC" x="180" y="240">?</text>
+        </svg>
+      </div>
+
+      <div class="num-cards-wrap">
+        <div class="num-cards-label">아래 숫자 카드를 끌어다 놓으세요</div>
+        <div class="num-cards" id="makingNumCards"></div>
       </div>
     </section>
   </main>
@@ -774,12 +765,12 @@
       <div class="progress-bar"><div class="progress-bar-fill" id="breakingProgressFill"></div></div>
     </div>
   </div>
-  <div class="problem-title">🎨 10 배열판의 그림을 보고, 가르기판에 숫자 카드를 끌어다 놓아 보세요!</div>
+  <div class="problem-title">👩‍🏫 10 배열판의 그림을 보고, 가르기판에 숫자 카드를 끌어다 놓아 보세요!</div>
 
   <main>
     <!-- 좌측: 미리 채워진 10 배열판 -->
     <section class="panel breaking-frame-panel">
-      <h2>📦 10 배열판</h2>
+      <h2>10 배열판</h2>
       <div class="ten-frame-wrap">
         <div class="ten-frame readonly" id="breakingFrame"></div>
       </div>
@@ -787,17 +778,17 @@
 
     <!-- 우측: 빈 가르기판 + 숫자 카드 -->
     <section class="panel breaking-bond-panel">
-      <h2>🔢 가르기판</h2>
+      <h2>가르기판</h2>
       <div class="bond-wrap">
         <svg class="bond-svg" viewBox="0 0 360 310" xmlns="http://www.w3.org/2000/svg" id="breakingBondSvg">
-          <line class="bond-line" x1="80" y1="130" x2="180" y2="180"/>
-          <line class="bond-line" x1="280" y1="130" x2="180" y2="180"/>
-          <rect class="bond-rect drop-target" x="10" y="10" width="140" height="120" rx="14" ry="14" data-key="a"/>
-          <text class="bond-text placeholder" id="breakTextA" x="80" y="70">?</text>
-          <rect class="bond-rect drop-target" x="210" y="10" width="140" height="120" rx="14" ry="14" data-key="b"/>
-          <text class="bond-text placeholder" id="breakTextB" x="280" y="70">?</text>
-          <rect class="bond-rect drop-target" x="110" y="180" width="140" height="120" rx="14" ry="14" data-key="c"/>
-          <text class="bond-text placeholder" id="breakTextC" x="180" y="240">?</text>
+          <line class="bond-line" x1="180" y1="130" x2="80" y2="180"/>
+          <line class="bond-line" x1="180" y1="130" x2="280" y2="180"/>
+          <rect class="bond-rect drop-target" x="110" y="10" width="140" height="120" rx="14" ry="14" data-key="c"/>
+          <text class="bond-text placeholder" id="breakTextC" x="180" y="70">?</text>
+          <rect class="bond-rect drop-target" x="10" y="180" width="140" height="120" rx="14" ry="14" data-key="a"/>
+          <text class="bond-text placeholder" id="breakTextA" x="80" y="240">?</text>
+          <rect class="bond-rect drop-target" x="210" y="180" width="140" height="120" rx="14" ry="14" data-key="b"/>
+          <text class="bond-text placeholder" id="breakTextB" x="280" y="240">?</text>
         </svg>
       </div>
 
@@ -835,9 +826,9 @@
 
 /* ---------- 문제 데이터 ---------- */
 const PROBLEMS_MAKING = [
-  { parts: [5, 5], emojis: ['🌷', '🌻'] },
   { parts: [3, 7], emojis: ['🐶', '🐱'] },
-  { parts: [1, 9], emojis: ['🌱', '🍀'] }
+  { parts: [5, 5], emojis: ['🌷', '🌻'] },
+  { parts: [8, 2], emojis: ['🍎', '🍌'] }
 ];
 
 const PROBLEMS_BREAKING = [
@@ -892,89 +883,103 @@ $$('[data-back]').forEach(btn => {
    ============================================================ */
 function renderMakingProblem() {
   const p = PROBLEMS_MAKING[state.problemIdx];
-  state.frame = Array(10).fill(null);
+  state.bond = { a: null, b: null, c: null };
 
   // 진행도
   $('#makingNum').textContent = state.problemIdx + 1;
   $('#makingProgressFill').style.width =
     (state.problemIdx / PROBLEMS_MAKING.length * 100) + '%';
 
-  // 모으기판 숫자 (홀짝으로 좌우 순서 변화 → 다양성)
-  const order = state.problemIdx % 2 === 0 ? [0, 1] : [1, 0];
-  $('#makingTextA').textContent = p.parts[order[0]];
-  $('#makingTextB').textContent = p.parts[order[1]];
-  $('#makingTextC').textContent = 10;
+  // 10 배열판: 부분1 이모지 → 부분2 이모지 순서로 미리 채움
+  const newFrame = [];
+  for (let i = 0; i < p.parts[0]; i++) newFrame.push(p.emojis[0]);
+  for (let i = 0; i < p.parts[1]; i++) newFrame.push(p.emojis[1]);
+  while (newFrame.length < 10) newFrame.push(null);
 
-  // 팔레트 (이 문제용 이모지 2개만)
-  const pal = $('#makingPalette');
-  pal.innerHTML = '';
-  p.emojis.forEach(emoji => {
-    const div = document.createElement('div');
-    div.className = 'palette-item';
-    div.textContent = emoji;
-    div.dataset.emoji = emoji;
-    pal.appendChild(div);
+  const frame = $('#makingFrame');
+  frame.innerHTML = '';
+  newFrame.forEach((val) => {
+    const c = document.createElement('div');
+    c.className = 'cell' + (val ? ' filled' : '');
+    c.textContent = val || '';
+    frame.appendChild(c);
   });
 
-  renderMakingFrame();
+  renderMakingBond();
+  renderMakingNumCards();
 
   $('#makingNext').classList.remove('show');
   $('#makingCheck').style.display = 'inline-block';
   $('#makingReset').style.display = 'inline-block';
 }
 
-function renderMakingFrame() {
-  const frame = $('#makingFrame');
-  frame.innerHTML = '';
-  state.frame.forEach((val, i) => {
-    const c = document.createElement('div');
-    c.className = 'cell' + (val ? ' filled' : '');
-    c.dataset.idx = i;
-    c.textContent = val || '';
-    if (val) {
-      c.addEventListener('click', () => {
-        state.frame[i] = null;
-        renderMakingFrame();
-      });
+function renderMakingBond() {
+  ['a','b','c'].forEach(key => {
+    const txtEl  = $('#makeText' + key.toUpperCase());
+    const rectEl = document.querySelector(`#makingBondSvg .bond-rect[data-key="${key}"]`);
+    const v = state.bond[key];
+    if (v === null) {
+      txtEl.textContent = '?';
+      txtEl.classList.add('placeholder');
+      rectEl.classList.remove('filled-bond');
+    } else {
+      txtEl.textContent = v;
+      txtEl.classList.remove('placeholder');
+      rectEl.classList.add('filled-bond');
     }
-    frame.appendChild(c);
   });
 }
 
+function renderMakingNumCards() {
+  const cards = $('#makingNumCards');
+  cards.innerHTML = '';
+  for (let i = 1; i <= 10; i++) {
+    const c = document.createElement('div');
+    c.className = 'num-card';
+    c.textContent = i;
+    c.dataset.num = i;
+    cards.appendChild(c);
+  }
+}
+
 $('#makingReset').addEventListener('click', () => {
-  state.frame = Array(10).fill(null);
-  renderMakingFrame();
+  state.bond = { a: null, b: null, c: null };
+  renderMakingBond();
+});
+
+// 모으기판의 채워진 박스 클릭 → 비우기
+$$('#makingBondSvg .bond-rect.drop-target').forEach(rect => {
+  rect.addEventListener('click', (e) => {
+    if (state.screen !== 'making') return;
+    if (dragNum) return;
+    const key = rect.dataset.key;
+    if (state.bond[key] !== null) {
+      state.bond[key] = null;
+      renderMakingBond();
+    }
+  });
 });
 
 $('#makingCheck').addEventListener('click', () => {
   const p = PROBLEMS_MAKING[state.problemIdx];
-  const total = state.frame.filter(v => v !== null).length;
+  const { a, b, c } = state.bond;
 
-  if (total === 0) {
-    return showCheckPopup('먼저 그림을 채워볼까요?', '10 배열판에 그림을 놓아주세요 🌱', false);
+  if (a === null || b === null || c === null) {
+    return showCheckPopup('숫자를 모두 채워볼까요?', '세 칸에 모두 숫자를 끌어다 놓아요 ✏️', false);
   }
-  if (total !== 10) {
-    return showCheckPopup(`아직 ${total}개예요`, '10개를 모두 채워주세요!', false);
-  }
-
-  // 이모지별 개수 세기
-  const counts = {};
-  state.frame.forEach(v => { counts[v] = (counts[v] || 0) + 1; });
-  const keys = Object.keys(counts);
-
-  if (keys.length !== 2) {
-    return showCheckPopup('두 가지 그림이 필요해요', '서로 다른 두 종류로 채워주세요 🎨', false);
+  if (c !== 10) {
+    return showCheckPopup('전체는 10이에요', '아래쪽 큰 칸에는 10을 놓아요!', false);
   }
 
-  const sortedCounts = Object.values(counts).sort((a,b) => a-b);
-  const sortedParts  = [...p.parts].sort((a,b) => a-b);
+  const ans   = [a, b].sort((x,y) => x - y);
+  const parts = [...p.parts].sort((x,y) => x - y);
 
-  if (sortedCounts[0] === sortedParts[0] && sortedCounts[1] === sortedParts[1]) {
+  if (ans[0] === parts[0] && ans[1] === parts[1]) {
     showCheckPopup('🎉 정답이에요!',
-      `${p.parts[0]}과(와) ${p.parts[1]}을(를) 모으면 10이 돼요!`, true);
+      `${parts[0]}과(와) ${parts[1]}을(를) 모으면 10이 돼요!`, true);
     onMakingCorrect();
   } else {
-    showCheckPopup('아쉬워요!', '모으기판의 숫자와 그림 개수를 비교해 봐요 🔍', false);
+    showCheckPopup('다시 한번 살펴봐요', '그림을 세어 숫자와 비교해 보세요 🔍', false);
   }
 });
 
@@ -982,7 +987,6 @@ function onMakingCorrect() {
   $('#makingCheck').style.display = 'none';
 
   if (state.problemIdx === PROBLEMS_MAKING.length - 1) {
-    // 모든 문제 완료
     setTimeout(() => {
       $('#makingProgressFill').style.width = '100%';
       celebrate('🎉 10 모으기 완성! 🎉');
@@ -1092,7 +1096,7 @@ $('#breakingCheck').addEventListener('click', () => {
     return showCheckPopup('숫자를 모두 채워볼까요?', '세 칸에 모두 숫자를 끌어다 놓아요 ✏️', false);
   }
   if (c !== 10) {
-    return showCheckPopup('전체는 10이에요', '아래쪽 큰 칸에는 10을 놓아요!', false);
+    return showCheckPopup('전체는 10이에요', '위쪽 큰 칸에는 10을 놓아요!', false);
   }
 
   const ans   = [a, b].sort((x,y) => x - y);
@@ -1131,84 +1135,20 @@ $('#breakingNext').addEventListener('click', () => {
 });
 
 /* ============================================================
-   3) 드래그앤드롭 - 모으기 모드 (이모지 → 10 배열판)
-   ============================================================ */
-let drag = null;
-
-document.addEventListener('pointerdown', (e) => {
-  if (state.screen !== 'making') return;
-  const item = e.target.closest('.palette-item');
-  if (item) {
-    startEmojiDrag(e, item.dataset.emoji);
-  }
-});
-
-function startEmojiDrag(e, emoji) {
-  if (drag) return;
-  e.preventDefault();
-  const pt = getPoint(e);
-  const ghost = document.createElement('div');
-  ghost.className = 'drag-ghost';
-  ghost.textContent = emoji;
-  document.body.appendChild(ghost);
-  ghost.style.left = pt.x + 'px';
-  ghost.style.top  = pt.y + 'px';
-  drag = { ghost, emoji };
-  document.addEventListener('pointermove',   onEmojiMove);
-  document.addEventListener('pointerup',     onEmojiUp);
-  document.addEventListener('pointercancel', onEmojiUp);
-}
-function onEmojiMove(e) {
-  if (!drag) return;
-  const pt = getPoint(e);
-  drag.ghost.style.left = pt.x + 'px';
-  drag.ghost.style.top  = pt.y + 'px';
-  highlightEmojiSnap(pt);
-}
-function onEmojiUp(e) {
-  if (!drag) return;
-  const pt = getPoint(e);
-  const target = findEmojiSnapTarget(pt);
-  if (target !== -1) {
-    state.frame[target] = drag.emoji;
-    renderMakingFrame();
-  }
-  drag.ghost.remove();
-  $$('.cell.snap-target').forEach(c => c.classList.remove('snap-target'));
-  drag = null;
-  document.removeEventListener('pointermove',   onEmojiMove);
-  document.removeEventListener('pointerup',     onEmojiUp);
-  document.removeEventListener('pointercancel', onEmojiUp);
-}
-function findEmojiSnapTarget(pt, radius = 60) {
-  const cells = $$('#makingFrame .cell');
-  let best = -1, bestDist = Infinity;
-  cells.forEach((cell, i) => {
-    if (state.frame[i] !== null) return;
-    const r = cell.getBoundingClientRect();
-    const cx = r.left + r.width/2;
-    const cy = r.top  + r.height/2;
-    const d = Math.hypot(pt.x - cx, pt.y - cy);
-    if (d < bestDist) { bestDist = d; best = i; }
-  });
-  return bestDist <= radius ? best : -1;
-}
-function highlightEmojiSnap(pt) {
-  $$('.cell.snap-target').forEach(c => c.classList.remove('snap-target'));
-  const idx = findEmojiSnapTarget(pt);
-  if (idx !== -1) {
-    const cell = $$('#makingFrame .cell')[idx];
-    if (cell) cell.classList.add('snap-target');
-  }
-}
-
-/* ============================================================
-   4) 드래그앤드롭 - 가르기 모드 (숫자 카드 → 가르기판)
+   3) 드래그앤드롭 - 숫자 카드 → 모으기/가르기판 (양 모드 공용)
    ============================================================ */
 let dragNum = null;
 
+function currentBondSvgSel() {
+  return state.screen === 'making' ? '#makingBondSvg' : '#breakingBondSvg';
+}
+function renderActiveBond() {
+  if (state.screen === 'making') renderMakingBond();
+  else renderBreakingBond();
+}
+
 document.addEventListener('pointerdown', (e) => {
-  if (state.screen !== 'breaking') return;
+  if (state.screen !== 'breaking' && state.screen !== 'making') return;
   const card = e.target.closest('.num-card');
   if (card) {
     startNumDrag(e, parseInt(card.dataset.num, 10));
@@ -1243,18 +1183,17 @@ function onNumUp(e) {
   const target = findBondSnapTarget(pt);
   if (target) {
     state.bond[target] = dragNum.num;
-    renderBreakingBond();
+    renderActiveBond();
   }
   dragNum.ghost.remove();
   $$('.bond-rect.snap-bond').forEach(r => r.classList.remove('snap-bond'));
-  // 다음 click 이벤트가 박스를 비우지 않도록 약간 지연
   setTimeout(() => { dragNum = null; }, 50);
   document.removeEventListener('pointermove',   onNumMove);
   document.removeEventListener('pointerup',     onNumUp);
   document.removeEventListener('pointercancel', onNumUp);
 }
 function findBondSnapTarget(pt) {
-  const rects = $$('#breakingBondSvg .bond-rect.drop-target');
+  const rects = $$(currentBondSvgSel() + ' .bond-rect.drop-target');
   for (const rect of rects) {
     const r = rect.getBoundingClientRect();
     if (pt.x >= r.left && pt.x <= r.right &&
@@ -1269,7 +1208,7 @@ function highlightBondSnap(pt) {
   const target = findBondSnapTarget(pt);
   if (target) {
     const rect = document.querySelector(
-      `#breakingBondSvg .bond-rect[data-key="${target}"]`);
+      `${currentBondSvgSel()} .bond-rect[data-key="${target}"]`);
     if (rect) rect.classList.add('snap-bond');
   }
 }
