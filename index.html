@@ -318,7 +318,7 @@
     cursor: pointer;
   }
   .cell.filled {
-    background: var(--sun-yellow);
+    background: var(--cream-deep);
     border-style: solid;
     border-color: var(--leaf-deep);
     box-shadow: inset 0 -4px 0 rgba(0,0,0,0.06);
@@ -337,7 +337,7 @@
   /* ===== 모으기/가르기 판 (SVG bond) ===== */
   .bond-wrap {
     display: flex; flex-direction: column; align-items: center;
-    background: var(--cream-deep);
+    background: var(--leaf-light);
     border-radius: 16px;
     padding: 8px 6px;
   }
@@ -365,7 +365,7 @@
     stroke-width: 6;
   }
   .bond-rect.filled-bond {
-    fill: var(--sun-yellow);
+    fill: var(--cream-deep);
     stroke: var(--leaf-deep);
   }
   .bond-line {
@@ -990,13 +990,14 @@ function onMakingCorrect() {
     setTimeout(() => {
       $('#makingProgressFill').style.width = '100%';
       celebrate('🎉 10 모으기 완성! 🎉');
-      setTimeout(() => showScreen('select'), 3200);
-    }, 1500);
+      setTimeout(() => showScreen('select'), 2500);
+    }, 1200);
   } else {
     setTimeout(() => {
-      $('#makingNext').classList.add('show');
       $('#makingProgressFill').style.width =
         ((state.problemIdx + 1) / PROBLEMS_MAKING.length * 100) + '%';
+      state.problemIdx++;
+      renderMakingProblem();
     }, 1200);
   }
 }
@@ -1118,13 +1119,14 @@ function onBreakingCorrect() {
     setTimeout(() => {
       $('#breakingProgressFill').style.width = '100%';
       celebrate('🎉 10 가르기 완성! 🎉');
-      setTimeout(() => showScreen('select'), 3200);
-    }, 1500);
+      setTimeout(() => showScreen('select'), 2500);
+    }, 1200);
   } else {
     setTimeout(() => {
-      $('#breakingNext').classList.add('show');
       $('#breakingProgressFill').style.width =
         ((state.problemIdx + 1) / PROBLEMS_BREAKING.length * 100) + '%';
+      state.problemIdx++;
+      renderBreakingProblem();
     }, 1200);
   }
 }
@@ -1247,7 +1249,7 @@ function celebrate(msg) {
     document.body.appendChild(c);
     setTimeout(() => c.remove(), 4000);
   }
-  setTimeout(() => banner.classList.remove('show'), 2800);
+  setTimeout(() => banner.classList.remove('show'), 2500);
 }
 
 /* ============================================================
