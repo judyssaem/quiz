@@ -236,7 +236,7 @@
     margin: 4px auto 6px;
     padding: 0 14px;
   }
-  @media (max-width: 860px) {
+  @media (max-width: 700px) {
     main { grid-template-columns: 1fr; }
   }
 
@@ -678,6 +678,52 @@
     .btn-back { font-size: 14px; padding: 7px 10px; }
     .progress-text { font-size: 14px; }
     .num-card { font-size: 22px; }
+  }
+
+  /* ===== 태블릿/짧은 화면(가로 모드 등): 한 화면에 모두 보이도록 컴팩트 모드 ===== */
+  @media (max-height: 900px) {
+    .top-bar { margin: 6px auto 2px; }
+    .problem-title {
+      font-size: 18px;
+      padding: 6px 14px;
+      margin: 2px auto 2px;
+    }
+    main { margin: 2px auto 4px; gap: 10px; }
+    .panel { padding: 8px 10px; }
+    .panel h2 { font-size: 16px; margin: 0 0 5px; }
+    .ten-frame-wrap { padding: 8px 10px; margin-top: 6px; }
+    .ten-frame { max-width: min(440px, 60vh); gap: 6px; }
+    .cell { font-size: clamp(26px, 5vh, 44px); }
+    .making-bond-panel .bond-wrap,
+    .breaking-bond-panel .bond-wrap {
+      padding: 8px 8px;
+      max-width: 300px;
+    }
+    .making-bond-panel .bond-svg,
+    .breaking-bond-panel .bond-svg {
+      max-width: min(260px, 28vh);
+    }
+    .making-bond-panel .num-cards-wrap,
+    .breaking-bond-panel .num-cards-wrap {
+      max-width: 300px;
+      margin-top: 10px;
+    }
+    .num-cards-wrap { padding: 6px 8px; }
+    .num-cards-label { font-size: 13px; margin-bottom: 5px; }
+    .actions-below { margin: 4px auto 10px; gap: 10px; }
+    .btn-action { padding: 8px 14px; font-size: 14px; }
+  }
+
+  /* 더 짧은 화면 (가로 모드 태블릿 등) */
+  @media (max-height: 760px) {
+    .problem-title { font-size: 16px; padding: 4px 12px; }
+    .making-bond-panel .bond-svg,
+    .breaking-bond-panel .bond-svg {
+      max-width: min(220px, 24vh);
+    }
+    .ten-frame { max-width: min(380px, 50vh); }
+    .num-cards-label { display: none; }
+    .num-cards-wrap { padding: 5px 6px; }
   }
 </style>
 </head>
