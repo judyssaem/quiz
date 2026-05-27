@@ -231,10 +231,10 @@
     position: relative; z-index: 1;
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    gap: 12px;
-    max-width: 1100px;
-    margin: 4px auto 6px;
-    padding: 0 14px;
+    gap: 14px;
+    max-width: 1240px;
+    margin: 6px auto 8px;
+    padding: 0 16px;
   }
   @media (max-width: 700px) {
     main { grid-template-columns: 1fr; }
@@ -305,7 +305,7 @@
     gap: 8px;
     aspect-ratio: 5 / 2;
     width: 100%;
-    max-width: min(540px, 75vh);
+    max-width: min(620px, 80vh);
     margin: 0 auto;
   }
   .cell {
@@ -452,10 +452,10 @@
   }
   /* 모으기판/그림 레이아웃 아래 중앙 배치 */
   .actions-below {
-    max-width: 1100px;
-    margin: 8px auto 14px;
-    padding: 0 14px;
-    gap: 12px;
+    max-width: 1240px;
+    margin: 10px auto 16px;
+    padding: 0 16px;
+    gap: 14px;
   }
 
   /* ===== 모으기 · 가르기 모드 공통: 좌·우 패널 통일 (flex column, 10배열판 세로 중앙) ===== */
@@ -476,21 +476,21 @@
   .making-bond-panel .bond-wrap,
   .breaking-bond-panel .bond-wrap {
     width: 100%;
-    max-width: 340px;
+    max-width: 400px;
     margin-left: auto;
     margin-right: auto;
     margin-top: auto;
-    padding: 12px 10px;
+    padding: 14px 12px;
     box-sizing: border-box;
   }
   .making-bond-panel .bond-svg,
   .breaking-bond-panel .bond-svg {
-    max-width: min(320px, 38vh);
+    max-width: min(380px, 44vh);
   }
   .making-bond-panel .num-cards-wrap,
   .breaking-bond-panel .num-cards-wrap {
     width: 100%;
-    max-width: 340px;
+    max-width: 400px;
     margin-left: auto;
     margin-right: auto;
     margin-top: 14px;
@@ -680,50 +680,37 @@
     .num-card { font-size: 22px; }
   }
 
-  /* ===== 태블릿/짧은 화면(가로 모드 등): 한 화면에 모두 보이도록 컴팩트 모드 ===== */
-  @media (max-height: 900px) {
+  /* ===== 태블릿 가로 모드(약 800x720) 대응: 한 화면에 들어가도록 약간만 줄임 ===== */
+  @media (max-height: 820px) {
     .top-bar { margin: 6px auto 2px; }
     .problem-title {
-      font-size: 18px;
+      font-size: 19px;
       padding: 6px 14px;
       margin: 2px auto 2px;
     }
-    main { margin: 2px auto 4px; gap: 10px; }
+    main { margin: 2px auto 4px; }
     .panel { padding: 8px 10px; }
-    .panel h2 { font-size: 16px; margin: 0 0 5px; }
-    .ten-frame-wrap { padding: 8px 10px; margin-top: 6px; }
-    .ten-frame { max-width: min(440px, 60vh); gap: 6px; }
-    .cell { font-size: clamp(26px, 5vh, 44px); }
+    .panel h2 { font-size: 17px; margin: 0 0 6px; }
+    .ten-frame-wrap { padding: 10px 12px; margin-top: 6px; }
+    .ten-frame { max-width: min(520px, 72vh); }
     .making-bond-panel .bond-wrap,
     .breaking-bond-panel .bond-wrap {
-      padding: 8px 8px;
-      max-width: 300px;
+      padding: 10px 8px;
+      max-width: 340px;
     }
     .making-bond-panel .bond-svg,
     .breaking-bond-panel .bond-svg {
-      max-width: min(260px, 28vh);
+      max-width: min(320px, 34vh);
     }
     .making-bond-panel .num-cards-wrap,
     .breaking-bond-panel .num-cards-wrap {
-      max-width: 300px;
       margin-top: 10px;
+      max-width: 340px;
     }
-    .num-cards-wrap { padding: 6px 8px; }
-    .num-cards-label { font-size: 13px; margin-bottom: 5px; }
-    .actions-below { margin: 4px auto 10px; gap: 10px; }
-    .btn-action { padding: 8px 14px; font-size: 14px; }
-  }
-
-  /* 더 짧은 화면 (가로 모드 태블릿 등) */
-  @media (max-height: 760px) {
-    .problem-title { font-size: 16px; padding: 4px 12px; }
-    .making-bond-panel .bond-svg,
-    .breaking-bond-panel .bond-svg {
-      max-width: min(220px, 24vh);
-    }
-    .ten-frame { max-width: min(380px, 50vh); }
-    .num-cards-label { display: none; }
-    .num-cards-wrap { padding: 5px 6px; }
+    .num-cards-wrap { padding: 6px 10px; }
+    .num-cards-label { font-size: 13px; margin-bottom: 6px; }
+    .actions-below { margin: 6px auto 10px; gap: 12px; }
+    .btn-action { padding: 9px 16px; font-size: 15px; }
   }
 </style>
 </head>
@@ -873,12 +860,12 @@
 /* ---------- 문제 데이터 ---------- */
 const PROBLEMS_MAKING = [
   { parts: [3, 7], emojis: ['🌱', '🌷'] },
-  { parts: [5, 5], emojis: ['🐶', '😺'] },
+  { parts: [5, 5], emojis: ['🐶', '🐱'] },
   { parts: [8, 2], emojis: ['🍎', '🍌'] }
 ];
 
 const PROBLEMS_BREAKING = [
-  { parts: [1, 9], emojis: ['🌳', '🌻'] },
+  { parts: [1, 9], emojis: ['🌱', '🌳'] },
   { parts: [4, 6], emojis: ['🍓', '🍇'] },
   { parts: [7, 3], emojis: ['✏️', '📓'] }
 ];
